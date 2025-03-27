@@ -5,13 +5,9 @@
 #include <Servo.h>
 #include "avr8-stub.h"
 #include "debug.h"
-#include <Arduino_AVRSTL.h>
-#include <array>
-
-using namespace std;
+#include "Path.h"
 
 #define PATH_LENGTH 7
-#define PATH_END 255
 
 struct JointData
 {
@@ -23,20 +19,16 @@ struct JointData
 class Joint
 {
 public:
-    // Constructor
-    Joint(const JointData& jd);
-    void attach();
-    void setPath(const array<int, PATH_LENGTH>& newPath);
+    Joint(const JointData& d, Path& p);
     void update(uint8_t frame, float progress);
-    void writeAngle(float angle); 
-    void writeMicros(int micros); 
- 
-    Servo servo;
-    float angle;
-    array<int, PATH_LENGTH+1> path;
+    void writeMicros(int16_t micros);
+    int16_t getCurrentMicros();
+
+private:
     JointData data;
-    bool pathSet = false;
-    uint8_t finalFrame = PATH_LENGTH - 1;
+    Path& path;
+    Servo servo;
+    int16_t currentMicros;
 };
 
 #endif // JOINT_H
