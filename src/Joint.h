@@ -22,9 +22,10 @@ public:
     Joint(const JointData& d, Path& p);
     void update(uint8_t frame, float progress);
     void writeMicros(int16_t micros);
+    void writeAngle(float angle);
     int16_t getCurrentMicros();
 
-private:
+// private:
     JointData data;
     Path& path;
     Servo servo;

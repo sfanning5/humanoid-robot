@@ -26,7 +26,7 @@ void Joint::writeMicros(int16_t micros)
 {
     currentMicros = micros;
 
-    micros = data.homeMicros + micros * data.correctionModifier * ACC_MODIFIER; // TODO: refactor this calculation
+    micros = data.homeMicros + micros; //* data.correctionModifier * ACC_MODIFIER; // TODO: refactor this calculation
     // PRINTLN(micros);
     if(micros != servo.readMicroseconds())
         servo.writeMicroseconds(micros);

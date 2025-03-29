@@ -13,7 +13,7 @@ void Path::addMicros(int16_t micros)
 
 void Path::addAngle(float angle)
 {
-    int16_t micros = (angle/MAX_ANGLE) * (MAX_MICROS-MIN_MICROS);
+    int16_t micros = ((2150-730)/(150-30))*angle;
     addMicros(micros);
 }
 

@@ -37,7 +37,7 @@ void Link::setKinematicPath(Point targets[], int times[])
         float theta1 = -acos( (sq(L2)-sq(L1)-sq(x)-sq(y)) / (-2*L1*sqrt(sq(x) + sq(y))) ) - atan2(-x, -y);
         float theta2 = PI - acos( (sq(x)+sq(y)-sq(L1)-sq(L2)) / (-2*L1*L2) );
 
-        PRINTLN(freeMemory3());
+        // PRINTLN(freeMemory3());
 
         // Convert to degrees and ensure correct direction
         // TODO check what casting here is necessary
@@ -46,7 +46,7 @@ void Link::setKinematicPath(Point targets[], int times[])
         paths[1].addAngle( theta2 * 180.0 / PI * linkData.sideModifier );
         paths[2].addAngle( (theta1 + theta2) * 180.0/PI * linkData.sideModifier );
 
-        PRINTLN(freeMemory3());
+        // PRINTLN(freeMemory3());
     }
 }
 
@@ -54,7 +54,7 @@ void Link::setBalancingPath(int liftedLegAngles[], float liftedLegCOMYs[], int t
 {
     resetPaths(times);
 
-    const float D = 0;
+    const float D = -0.2;
     const float FL = 0.33;
     const float FT = 0.41;
     const float LH = 1.25;
@@ -80,11 +80,11 @@ void Link::setBalancingPath(int liftedLegAngles[], float liftedLegCOMYs[], int t
 
         float a = asin( (FL*(LH+L2*sin(b)+LW*cos(b)) + 0.5*LH*FT - D*(2.0*FL+FT)) / ((2.0*FL+FT)*(sqrt(sq(A) + sq(B)))) ) - atan2(B, A);
         a *= 180.0 / PI * linkData.sideModifier;
-        PRINTLN(freeMemory3());
+        // PRINTLN(freeMemory3());
 
         paths[0].addAngle( a );
-        paths[1].addAngle(a + (6.5 + 3 * (float)liftedLegAngles[i] / 30) * linkData.sideModifier);
-        PRINTLN(freeMemory3());
+        paths[1].addAngle(a + (3.5 + 3 * (float)liftedLegAngles[i] / 30) * linkData.sideModifier);
+        // PRINTLN(freeMemory3());
     }
 
 }
