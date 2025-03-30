@@ -7,8 +7,6 @@
 #include "debug.h"
 #include "Path.h"
 
-#define PATH_LENGTH 7
-
 struct JointData
 {
     int homeMicros;

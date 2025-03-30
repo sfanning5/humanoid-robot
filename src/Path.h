@@ -10,6 +10,8 @@
 #define MAX_MICROS 2250
 #define MAX_ANGLE 160
 
+#define PATH_LENGTH 8
+
 // Controls the path of a given link and performs calculations relevant to that link
 class Path 
 {
@@ -24,7 +26,7 @@ class Path
 
     // private:
         uint8_t pathSize;
-        int16_t path[7];
+        int16_t path[PATH_LENGTH+1];
 };
 
 #endif

@@ -43,18 +43,18 @@ const LinkData linkData[LINK_COUNT] =
 
 const JointData jointData[JOINT_COUNT] =
 {
-    {1160, 8, 0.9},   // "Left Ankle"
-    {1230, 11, 0.85}, // "Left Ankle Rotator"
-    {1100, 13, 1}, // "Left Knee"
-    {1300, 9, 1},     // "Left Hip"
-    {1390, 2, 0.85},  // "Left Hip Rotator"
+    {1600, 11, 0.9},   // "Left Ankle"
+    {1200, 13, 0.85}, // "Left Ankle Rotator"
+    {1045, 8, 1},     // "Left Knee"
+    {1765, 9, 1},     // "Left Hip"
+    {1345, 2, 0.85},  // "Left Hip Rotator"
     // {1500, A0}, // "Left Shoulder"
 
-    {1150, 6, 0.85},  // "Right Ankle"
-    {1370, 12, 1},    // "Right Ankle Rotator"
-    {1960, 10, 0.95}, // "Right Knee"
-    {1590, 7, 0.95},  // "Right Hip"
-    {1540, 3, 0.82},  // "Right Hip Rotator"
+    {1490, 6, 0.85},  // "Right Ankle"
+    {1350, 12, 0.97},  // "Right Ankle Rotator"
+    {2000, 10, 0.95}, // "Right Knee"
+    {1550, 7, 0.92},  // "Right Hip"
+    {1535, 3, 0.78},  // "Right Hip Rotator"
     // {1700, 5}, // "Right Shoulder"
 
     {1550, 4, 1} // "Torso"
@@ -97,28 +97,28 @@ void startMotion()
 
 int FS_TIMES[PATH_LENGTH] = {0, 600, 1000, 1300, 1700, 2100};
 
-int FS_rightFrontAngles[PATH_LENGTH] = {6, 6, 0, -10, PATH_END};
+int FS_rightFrontAngles[PATH_LENGTH] = {8, 8, 8, -10, PATH_END};
 float FS_rightFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, PATH_END};
 
 const int FS_LEFT_FRONT[LINK_LENGTH][PATH_LENGTH] = {
-  {4, 6, 0, -10, PATH_END},
-  {4, 6, 0, -10, PATH_END}
+  {-8, -8, 0, 10, PATH_END},
+  {-8, -8, 0, 10, PATH_END}
 };
 
 Point FS_rightSide[] = {
     {0, -4.35},
     {0.2, -4.1},
     {0.5, -4.1},
-    {1.2, -4.1},
-    {1.5, -4.1},
+    {1.3, -4.1},
+    {1.7, -4.1},
     {PATH_END, 0}};
 
 Point FS_leftSide[] = {
     {0, -4.39},
-    {-0.9, -3.8},
-    {-1.3, -3.8},
-    {-1.1, -4.1},
-    {-0.2, -4.1},
+    {-1.5, -3.7},
+    {-1.9, -3.7},
+    {-0.8, -4.0},
+    {-0.4, -4.1},
     {PATH_END, 0}};
 
 const int STEPS = 8;
@@ -138,20 +138,20 @@ void startFirstStep()
 // ### RIGHT STEP #### //
 
 // TODO refactor data types (int -> int16_t, etc.)
-int RS_leftFrontAngles[PATH_LENGTH] = {10, 10, 10, -8, PATH_END};
+int RS_leftFrontAngles[PATH_LENGTH] = {15, 15, 15, -8, PATH_END};
 float RS_leftFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, PATH_END};
 
 const int RS_RIGHT_FRONT[LINK_LENGTH][PATH_LENGTH] = {
-    {-10, -10, -10, 8, PATH_END},
-    {-10, -10, -10, 6, PATH_END}};
+    {-15, -15, -15, 8, PATH_END},
+    {-15, -15, -15, 6, PATH_END}};
 
 Point RS_rightSide[] = {
     {1.8, -4.1},
     {1, -3.5},
+    {-1.4, -3.5},
     {-1.7, -3.5},
-    {-1.9, -3.5},
-    {-0.8, -4.1},
-    {0.1, -4.1},
+    {-1.3, -4.0},
+    {-0.4, -4.0},
     // {-1.0, -4.0},
     {PATH_END, 0}};
 
@@ -160,7 +160,7 @@ Point RS_leftSide[] = {
     {0.5, -4.0},
     {0.6, -4.1},
     {0.7, -4.1},
-    {1.3, -4.0},
+    {1.1, -4.1},
     {1.8, -4.0},
     // {1.4, -4.1},
     {PATH_END, 0}};
@@ -187,15 +187,10 @@ void startRightStep()
   startMotion();
 }
 
-const int LS_LEFT_FRONT[LINK_LENGTH][PATH_LENGTH] = {
-  {10, 10, 10, -8, PATH_END},
-  {10, 10, 10, -6, PATH_END}
-};
-
 void startLeftStep()
 {
   links[0]->setKinematicPath(RS_rightSide, STEP_TIMES);
-  links[1]->setFixedPath(LS_LEFT_FRONT, STEP_TIMES);
+  links[1]->setFixedPath(RS_RIGHT_FRONT, STEP_TIMES);
   links[2]->setKinematicPath(RS_leftSide, STEP_TIMES);
   links[3]->setBalancingPath(RS_leftFrontAngles, RS_leftFrontCOMYs, STEP_TIMES);
 
@@ -217,8 +212,8 @@ const int TEST_PATH[LINK_LENGTH][PATH_LENGTH] = {
 
 const int TEST_PATH2[LINK_LENGTH][PATH_LENGTH] = {
     {0, PATH_END},
-    {-60, PATH_END},
-    {0, PATH_END},
+    {0, 45, PATH_END},
+    {0, 45, PATH_END},
 };
 
 Point TEST_POINTS[] = {
@@ -246,23 +241,11 @@ void setup()
 
   PRINTLN(freeMemory());
 
-  // startFirstStep();
+  startFirstStep();
   // startRightStep();
   // startLeftStep();
   
   PRINTLN(freeMemory());
-
-  // links[3]->setBalancingPath(RS_leftFrontAngles, RS_leftFrontCOMYs, STEP_TIMES);
-  // links[1]->setBalancingPath(RS_leftFrontAngles, RS_leftFrontCOMYs, STEP_TIMES);
-
-  // links[0]->setKinematicPath(TEST_POINTS, EVEN_SPACED_TIMES);
-  // links[2]->setKinematicPath(TEST_POINTS, EVEN_SPACED_TIMES);
-
-  // links[0]->setFixedPath(TEST_PATH, EVEN_SPACED_TIMES);
-  // links[2]->setFixedPath(TEST_PATH2, EVEN_SPACED_TIMES);
-
-  // links[0]->joints[2]->servo.write(120);
-  // links[0]->joints[2]->servo.writeMicroseconds(2400);
 
   // Left ankle
   // 90 -> 1500
@@ -277,6 +260,15 @@ void setup()
   // 120 -> 1830
   // 150 -> 2150
 
+  // links[0]->joints[2]->writeAngle(65);
+  // links[0]->joints[1]->writeAngle(65);
+  // links[2]->joints[1]->writeAngle(-30);
+
+  // links[1]->joints[0]->writeAngle(15);
+  // links[3]->joints[0]->writeAngle(15);
+  // links[1]->joints[1]->writeAngle(15);
+  // links[3]->joints[1]->writeAngle(15);
+
   startTime = time();
 }
 
@@ -287,18 +279,18 @@ void loop()
   bool nextMove = true;
   for(Link* link : links)
   {
-    // link->update(time() - startTime);
-    link->update(f6);
+    link->update(time() - startTime);
+    // link->update(f6);
     if(!link->motionComplete())
       nextMove = false;
   }
 
-  // if(nextMove && stepCounter > STEPS)
-  //   state = STANDING;
-  // if(nextMove && (state == FIRST_STEP || state == LEFT_STEP))
-  //   startRightStep();
-  // else if(nextMove && state == RIGHT_STEP)
-  //   startLeftStep();
+  if(nextMove && stepCounter > STEPS)
+    state = STANDING;
+  if(nextMove && (state == FIRST_STEP || state == LEFT_STEP))
+    startRightStep();
+  else if(nextMove && state == RIGHT_STEP)
+    startLeftStep();
 
   fakeMillis += 500;
 }

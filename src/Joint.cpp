@@ -21,12 +21,18 @@ void Joint::update(uint8_t frame, float progress)
     writeMicros(micros);
 }
 
+void Joint::writeAngle(float angle)
+{
+    int16_t micros = ((2150 - 730) / (150 - 30)) * angle;
+    writeMicros(micros);
+}
+
 // Write the angle of the servo in microseconds, with 0 being the home position
 void Joint::writeMicros(int16_t micros)
 {
     currentMicros = micros;
 
-    micros = data.homeMicros + micros; //* data.correctionModifier * ACC_MODIFIER; // TODO: refactor this calculation
+    micros = data.homeMicros + micros * data.correctionModifier;// * ACC_MODIFIER; // TODO: refactor this calculation
     // PRINTLN(micros);
     if(micros != servo.readMicroseconds())
         servo.writeMicroseconds(micros);

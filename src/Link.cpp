@@ -97,7 +97,7 @@ void Link::setFixedPath(const int targets[][PATH_LENGTH], int times[])
         for(int j = 0; j < PATH_LENGTH; j++)
         {
             if(targets[i][j] != PATH_END)
-                paths[i].addAngle(targets[i][j]);
+                paths[i].addAngle(targets[i][j] * linkData.sideModifier);
             else
                 break;
         }
