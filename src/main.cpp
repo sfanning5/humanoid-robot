@@ -43,14 +43,14 @@ const LinkData linkData[LINK_COUNT] =
 
 const JointData jointData[JOINT_COUNT] =
 {
-    {1600, 11, 0.9},   // "Left Ankle"
+    {1580, 11, 0.9},   // "Left Ankle"
     {1200, 13, 0.85}, // "Left Ankle Rotator"
     {1045, 8, 1},     // "Left Knee"
     {1765, 9, 1},     // "Left Hip"
     {1345, 2, 0.85},  // "Left Hip Rotator"
     // {1500, A0}, // "Left Shoulder"
 
-    {1490, 6, 0.85},  // "Right Ankle"
+    {1520, 6, 0.85},  // "Right Ankle"
     {1350, 12, 0.97},  // "Right Ankle Rotator"
     {2000, 10, 0.95}, // "Right Knee"
     {1550, 7, 0.92},  // "Right Hip"
@@ -95,30 +95,30 @@ void startMotion()
 
 // ### FIRST STEP #### //
 
-int FS_TIMES[PATH_LENGTH] = {0, 600, 1000, 1300, 1700, 2100};
+int FS_TIMES[PATH_LENGTH] = {0, 800, 1400, 1700, 2000, 2400, 3700};
 
-int FS_rightFrontAngles[PATH_LENGTH] = {8, 8, 8, -10, PATH_END};
-float FS_rightFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, PATH_END};
+int FS_rightFrontAngles[PATH_LENGTH] = {8, 8, 8, 0, 4, PATH_END}; // TODO: make float
+float FS_rightFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, -1, PATH_END};
 
 const int FS_LEFT_FRONT[LINK_LENGTH][PATH_LENGTH] = {
-  {-8, -8, 0, 10, PATH_END},
-  {-8, -8, 0, 10, PATH_END}
+  {-8, -8,  0,  0,  6, PATH_END},
+  {-12, -8, -4, -4, 2, PATH_END}
 };
 
 Point FS_rightSide[] = {
-    {0, -4.35},
-    {0.2, -4.1},
-    {0.5, -4.1},
-    {1.3, -4.1},
-    {1.7, -4.1},
+    {0, -4.2},
+    {0.1, -4.1},
+    {0.3, -4.1},
+    {0.4, -4.1},
+    {1.3, -3.9},
     {PATH_END, 0}};
 
 Point FS_leftSide[] = {
     {0, -4.39},
     {-1.5, -3.7},
-    {-1.9, -3.7},
-    {-0.8, -4.0},
-    {-0.4, -4.1},
+    {-2.2, -3.7},
+    {-2.2, -3.85},
+    {-1.3, -4.0},
     {PATH_END, 0}};
 
 const int STEPS = 8;
@@ -138,38 +138,36 @@ void startFirstStep()
 // ### RIGHT STEP #### //
 
 // TODO refactor data types (int -> int16_t, etc.)
-int RS_leftFrontAngles[PATH_LENGTH] = {15, 15, 15, -8, PATH_END};
-float RS_leftFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, PATH_END};
+int RS_leftFrontAngles[PATH_LENGTH] = {0, 15, 15, 0, 4, PATH_END};
+float RS_leftFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, -1, PATH_END};
 
 const int RS_RIGHT_FRONT[LINK_LENGTH][PATH_LENGTH] = {
-    {-15, -15, -15, 8, PATH_END},
-    {-15, -15, -15, 6, PATH_END}};
-
+    {0, -15, -15, 0, 6, PATH_END},
+    {0, -15, -15, 0, 6, PATH_END}};
+    
 Point RS_rightSide[] = {
-    {1.8, -4.1},
-    {1, -3.5},
-    {-1.4, -3.5},
-    {-1.7, -3.5},
-    {-1.3, -4.0},
-    {-0.4, -4.0},
-    // {-1.0, -4.0},
-    {PATH_END, 0}};
+  {2.2, -3.9},
+  {1.7, -3.6},
+  {-1.6, -3.6},
+  {-1.8, -3.9},
+  {-1.1, -3.9},
+  {PATH_END, 0}
+};
 
 Point RS_leftSide[] = {
-    {0.4, -4.1},
-    {0.5, -4.0},
-    {0.6, -4.1},
-    {0.7, -4.1},
-    {1.1, -4.1},
-    {1.8, -4.0},
-    // {1.4, -4.1},
-    {PATH_END, 0}};
+  {0.1, -4.0},
+  {0.4, -4.0},
+  {0.4, -4.1},
+  {0.4, -4.1},
+  {1.3, -4.0},
+  {PATH_END, 0}
+};
 
-const int f1 = 400;
-const int f2 = 400 + f1;
-const int f3 = 400 + f2;
-const int f4 = 400 + f3;
-const int f5 = 400 + f4;
+const int f1 = 500;
+const int f2 = 450 + f1;
+const int f3 = 700 + f2;
+const int f4 = 700 + f3;
+const int f5 = 700 + f4;
 const int f6 = 400 + f5;
 
 int STEP_TIMES[PATH_LENGTH] = {0, f1, f2, f3, f4, f5, f6};
@@ -180,8 +178,6 @@ void startRightStep()
   links[1]->setBalancingPath(RS_leftFrontAngles, RS_leftFrontCOMYs, STEP_TIMES);
   links[2]->setKinematicPath(RS_rightSide, STEP_TIMES);
   links[3]->setFixedPath(RS_RIGHT_FRONT, STEP_TIMES);
-
-  // links[0]->getJoint(0)->path[2] -= 4;
 
   state = RIGHT_STEP;
   startMotion();
@@ -279,7 +275,10 @@ void loop()
   bool nextMove = true;
   for(Link* link : links)
   {
-    link->update(time() - startTime);
+    // if(state == RIGHT_STEP)
+    //   link->update(min(time() - startTime, f1));
+    // else
+      link->update(time() - startTime);
     // link->update(f6);
     if(!link->motionComplete())
       nextMove = false;

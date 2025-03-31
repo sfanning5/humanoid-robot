@@ -68,10 +68,10 @@ void Link::setBalancingPath(int liftedLegAngles[], float liftedLegCOMYs[], int t
     int i;
     for(i = 0; liftedLegAngles[i] != PATH_END; i++)
     {
-        if(liftedLegAngles[i] == 0 && liftedLegCOMYs[i] == 0)
+        if(liftedLegCOMYs[i] < 0)
         {
-            paths[0].addMicros(0);
-            paths[1].addMicros(0);
+            paths[0].addAngle(liftedLegAngles[i] * linkData.sideModifier);
+            paths[1].addAngle(liftedLegAngles[i] * linkData.sideModifier);
             continue;
         }
 
@@ -82,8 +82,10 @@ void Link::setBalancingPath(int liftedLegAngles[], float liftedLegCOMYs[], int t
         a *= 180.0 / PI * linkData.sideModifier;
         // PRINTLN(freeMemory3());
 
-        paths[0].addAngle( a );
+        paths[0].addAngle(a);
         paths[1].addAngle(a + (3.5 + 3 * (float)liftedLegAngles[i] / 30) * linkData.sideModifier);
+        // PRINT("Angle: ");
+        // PRINTLN(a);
         // PRINTLN(freeMemory3());
     }
 
