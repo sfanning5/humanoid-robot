@@ -60,7 +60,7 @@ const JointData jointData[JOINT_COUNT] =
     {1550, 4, 1} // "Torso"
 };
 
-int EVEN_SPACED_TIMES[PATH_LENGTH] = {0, 1000, 2000, 3000, 4000, 5000};
+int EVEN_SPACED_TIMES[PATH_LENGTH] = {0, 700, 1400, 2100, 2800, 3500};
 
 uint32_t startTime = 0;
 
@@ -95,14 +95,14 @@ void startMotion()
 
 // ### FIRST STEP #### //
 
-int FS_TIMES[PATH_LENGTH] = {0, 800, 1400, 1700, 2000, 2400, 3700};
+int FS_TIMES[PATH_LENGTH] = {0, 800, 1400, 1900, 2000, 2400, 3700};
 
-int FS_rightFrontAngles[PATH_LENGTH] = {8, 8, 8, 0, 4, PATH_END}; // TODO: make float
-float FS_rightFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, -1, PATH_END};
+int FS_rightFrontAngles[PATH_LENGTH] = {8, 8, 8, -6, /* 4, */ PATH_END}; // TODO: make float
+float FS_rightFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, /* -1, */ PATH_END};
 
 const int FS_LEFT_FRONT[LINK_LENGTH][PATH_LENGTH] = {
-  {-8, -8,  0,  0,  6, PATH_END},
-  {-12, -8, -4, -4, 2, PATH_END}
+  {-8, -8,  6,  6, /*  6, */ PATH_END},
+  {-12, -8, 6, 6, /* 2, */ PATH_END}
 };
 
 Point FS_rightSide[] = {
@@ -117,8 +117,8 @@ Point FS_leftSide[] = {
     {0, -4.39},
     {-1.5, -3.7},
     {-2.2, -3.7},
-    {-2.2, -3.85},
-    {-1.3, -4.0},
+    {-2.2, -3.7},
+    {-1.3, -3.9},
     {PATH_END, 0}};
 
 const int STEPS = 8;
@@ -138,37 +138,55 @@ void startFirstStep()
 // ### RIGHT STEP #### //
 
 // TODO refactor data types (int -> int16_t, etc.)
-int RS_leftFrontAngles[PATH_LENGTH] = {0, 15, 15, 0, 4, PATH_END};
-float RS_leftFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, -1, PATH_END};
+int RS_leftFrontAngles[PATH_LENGTH] = {-6, 15, 15, -6, PATH_END};
+float RS_leftFrontCOMYs[PATH_LENGTH] = {1.4, 1.4, 1.4, 1.4, PATH_END};
 
 const int RS_RIGHT_FRONT[LINK_LENGTH][PATH_LENGTH] = {
-    {0, -15, -15, 0, 6, PATH_END},
-    {0, -15, -15, 0, 6, PATH_END}};
+    {6, -15, -15, 6, PATH_END},
+    {6, -15, -15, 6, PATH_END}};
     
 Point RS_rightSide[] = {
-  {2.2, -3.9},
-  {1.7, -3.6},
-  {-1.6, -3.6},
-  {-1.8, -3.9},
-  {-1.1, -3.9},
+  {2.2, -3.7},
+  {1.9, -3.55},
+  {-2.2, -3.55},
+  {-2.2, -3.7},
+  {-1.3, -3.9},
   {PATH_END, 0}
 };
 
 Point RS_leftSide[] = {
-  {0.1, -4.0},
-  {0.4, -4.0},
+  {0.2, -3.9},
+  {0.3, -4.1},
+  {0.3, -4.1},
   {0.4, -4.1},
-  {0.4, -4.1},
-  {1.3, -4.0},
+  {1.3, -3.9},
   {PATH_END, 0}
 };
 
-const int f1 = 500;
-const int f2 = 450 + f1;
+// Point RS_rightSide[] = {
+//   {2.2, -3.9},
+//   {1.7, -3.6},
+//   {-1.9, -3.6},
+//   {-1.9, -3.9},
+//   {-1.1, -3.9},
+//   {PATH_END, 0}
+// };
+
+// Point RS_leftSide[] = {
+//   {0.1, -4.0},
+//   {0.4, -4.0},
+//   {0.4, -4.1},
+//   {0.4, -4.1},
+//   {1.1, -4.0},
+//   {PATH_END, 0}
+// };
+
+const int f1 = 700;
+const int f2 = 700 + f1;
 const int f3 = 700 + f2;
 const int f4 = 700 + f3;
 const int f5 = 700 + f4;
-const int f6 = 400 + f5;
+const int f6 = 700 + f5;
 
 int STEP_TIMES[PATH_LENGTH] = {0, f1, f2, f3, f4, f5, f6};
 
@@ -260,10 +278,10 @@ void setup()
   // links[0]->joints[1]->writeAngle(65);
   // links[2]->joints[1]->writeAngle(-30);
 
-  // links[1]->joints[0]->writeAngle(15);
-  // links[3]->joints[0]->writeAngle(15);
-  // links[1]->joints[1]->writeAngle(15);
-  // links[3]->joints[1]->writeAngle(15);
+  // links[1]->joints[0]->writeAngle(-15);
+  // links[3]->joints[0]->writeAngle(-15);
+  // links[1]->joints[1]->writeAngle(-15);
+  // links[3]->joints[1]->writeAngle(-15);
 
   startTime = time();
 }
@@ -284,8 +302,8 @@ void loop()
       nextMove = false;
   }
 
-  if(nextMove && stepCounter > STEPS)
-    state = STANDING;
+  // if(nextMove && stepCounter > STEPS)
+  //   state = STANDING;
   if(nextMove && (state == FIRST_STEP || state == LEFT_STEP))
     startRightStep();
   else if(nextMove && state == RIGHT_STEP)

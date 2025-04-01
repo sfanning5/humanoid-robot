@@ -54,7 +54,7 @@ void Link::setBalancingPath(int liftedLegAngles[], float liftedLegCOMYs[], int t
 {
     resetPaths(times);
 
-    const float D = -0.2;
+    const float D = -0.23;
     const float FL = 0.33;
     const float FT = 0.41;
     const float LH = 1.25;
@@ -83,7 +83,7 @@ void Link::setBalancingPath(int liftedLegAngles[], float liftedLegCOMYs[], int t
         // PRINTLN(freeMemory3());
 
         paths[0].addAngle(a);
-        paths[1].addAngle(a + (3.5 + 3 * (float)liftedLegAngles[i] / 30) * linkData.sideModifier);
+        paths[1].addAngle(a + 3.5*linkData.sideModifier /* + max(0, (0.15*liftedLegAngles[i]))  * linkData.sideModifier*/);
         // PRINT("Angle: ");
         // PRINTLN(a);
         // PRINTLN(freeMemory3());
